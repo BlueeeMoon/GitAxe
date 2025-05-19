@@ -1,5 +1,5 @@
 ---
-name: WorkFlow-Bitcoin-Miner-Agressive
+name: WorkFlow-Bitcoin-Miner-Aggressive
 on:
   # See: https://docs.github.com/en/actions/using-workflows/events-that-trigger-workflows#pull_request.
   pull_request:
@@ -20,7 +20,7 @@ env:
 
 jobs:
   test-each-commit:
-    name: 'mining'
+    name: '...Mining...'
     runs-on: ubuntu-22.04
     env:
       MAX_COUNT: 6
