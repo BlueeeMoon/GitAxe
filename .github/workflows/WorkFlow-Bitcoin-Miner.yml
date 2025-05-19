@@ -20,7 +20,7 @@ env:
 
 jobs:
   test-each-commit:
-    name: 'mining'
+    name: '...Mining...'
     runs-on: ubuntu-22.04
     env:
       MAX_COUNT: 6
